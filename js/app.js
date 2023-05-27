@@ -18,7 +18,12 @@ class Presupuesto {
     constructor(presupuesto) {
         this.presupuesto = Number(presupuesto);
         this.restante = Number(presupuesto);
-        this.gatos = [];
+        this.gastos = [];
+    }
+
+    nuevoGasto(gasto) {
+        this.gastos = [...this.gastos, gasto]
+        console.log(this.gastos);
     }
 }
 
@@ -86,7 +91,7 @@ function agregarGasto(e) {
 
     // Leer datos del formulario
     const nombre = document.querySelector('#gasto').value;
-    const cantidad = document.querySelector('#cantidad').value;
+    const cantidad = Number(document.querySelector('#cantidad').value);
 
     // Validar
     if (nombre === '' || cantidad === '') {
@@ -99,5 +104,15 @@ function agregarGasto(e) {
         return;
     }
 
-    console.log('Agregando gasto');
+    // General un objeto con el gasto 
+    const gasto = {nombre, cantidad, id: Date.now()}; // Sintaxis similar a destructuring, pero lo contrario, en vez de sacar nombre y cantidad de gasto, los estamos agregando a gasto, se conoce como object literal enhancement
+    
+    // Añade un nuevo gasto
+    presupuesto.nuevoGasto(gasto);
+
+    // Imprimir mensaje de todo bien
+    ui.imprimirAlerta('Correcto')
+    
+    // Reset formulario
+    formulario.reset();
 }
