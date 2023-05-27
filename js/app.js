@@ -23,7 +23,6 @@ class Presupuesto {
 
     nuevoGasto(gasto) {
         this.gastos = [...this.gastos, gasto]
-        console.log(this.gastos);
     }
 }
 
@@ -58,6 +57,42 @@ class UI {
         setTimeout(() => {
             divMensaje.remove();
         }, 2000);
+    }
+
+    agregarGastoListado(gastos) {
+
+        this.limpiarHTML(); // Elimina el HTML previo
+
+        // Iterar sobre los gastos
+        gastos.forEach( gasto => {
+            const {cantidad, nombre, id} = gasto;
+            
+            // Crear LI
+            const nuevoGasto = document.createElement('LI');
+            nuevoGasto.className = 'list-group-item d-flex justify-content-between align-items-center'; // Diferencia en classList y className, la primera nos dice que clase ahi y con .add o remove sea agregan o eliminan, mientras que el ultimo solo dice que clase hay pero si se le pone = se le puede asignar un valor diferente
+            nuevoGasto.dataset.id = id; // Lo que hace dataset es que en este caso al li le agrega el atributo data-(nombre-después-del-punto), ejemplo dataset.id o dateset.cliente
+
+
+            // Agregar el HTML de gasto
+            nuevoGasto.innerHTML = `${nombre} <span class="badge badge-primary badge-pillar">$ ${cantidad} </span>`;
+
+
+            // Botón para borrar gasto
+            const btnBorrar = document.createElement('button');
+            btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
+            btnBorrar.innerHTML = `Borrar &times`;
+            nuevoGasto.appendChild(btnBorrar);
+
+
+            // Agregar al HTML
+            gastoListado.appendChild(nuevoGasto)
+        });
+    }
+
+    limpiarHTML() {
+        while (gastoListado.firstChild) {
+            gastoListado.removeChild(gastoListado.firstChild);
+        }
     }
 }
 
@@ -112,6 +147,10 @@ function agregarGasto(e) {
 
     // Imprimir mensaje de todo bien
     ui.imprimirAlerta('Correcto')
+
+    // Imprimir los gastos
+    const {gastos} = presupuesto;
+    ui.agregarGastoListado(gastos);
     
     // Reset formulario
     formulario.reset();
